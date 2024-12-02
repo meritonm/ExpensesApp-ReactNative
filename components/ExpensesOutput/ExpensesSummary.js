@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet } from "react-native";
+import { GlobalStyles } from "../../constants/styles";
 
 function ExpensesSummary({ expenses, periodSummary }) {
   const expensesSum = expenses.reduce((sum, expense) => {
-    return sum + expens.amout;
+    return sum + expense.amount;
   }, 0);
 
   return (
     <View style={styles.container}>
-      <Text>{periodSummary}</Text>
-      <Text>$1{expensesSum.toFixed(2)}(sum)</Text>
+      <Text style={styles.period}>{periodSummary}</Text>
+      <Text style={styles.expSum}>$ {expensesSum.toFixed(2)}</Text>
     </View>
   );
 }
@@ -16,5 +17,21 @@ function ExpensesSummary({ expenses, periodSummary }) {
 export default ExpensesSummary;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: 8,
+    backgroundColor: GlobalStyles.colors.primary50,
+    borderRadius: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  period: {
+    fontSize: 12,
+    color: GlobalStyles.colors.primary400,
+  },
+  expSum: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: GlobalStyles.colors.primary500,
+  },
 });
