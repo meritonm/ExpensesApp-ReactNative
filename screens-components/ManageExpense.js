@@ -1,10 +1,20 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 
-function ManageExpense() {
+function ManageExpense({ route, navigation }) {
+  const editedExpensedId = route.params?.expenseId;
+
+  const isEditing = !!editedExpensedId;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditing ? "Edit Expense" : "Add Expense",
+    });
+  }, [navigation, isEditing]);
+
   return (
     <View style={styles.container}>
-      <Text>ManageExpense</Text>
+      <Text>Manage Expense</Text>
     </View>
   );
 }
@@ -12,5 +22,7 @@ function ManageExpense() {
 export default ManageExpense;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    
+  },
 });
