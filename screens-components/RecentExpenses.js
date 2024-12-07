@@ -24,7 +24,11 @@ function RecentExpenses() {
 
   return (
     <View style={styles.container}>
-      <ExpensesOutput expenses={recentExpneses} expensesPeriod="Last 7 days" />
+      <ExpensesOutput
+        expenses={recentExpneses}
+        expensesPeriod="Last 7 days"
+        fallBackText="No Recent Expenese on last 7 days"
+      />
     </View>
   );
 }
