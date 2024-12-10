@@ -7,20 +7,13 @@ import { getDateMinusDays } from "../util/Date";
 function RecentExpenses() {
   const expensesCts = useContext(ExpenseContext);
 
-  // Kontrollo nëse ka të dhëna
-  console.log("All Expenses:", expensesCts.expenses);
-
   const recentExpneses = expensesCts.expenses.filter((expense) => {
     const today = new Date();
     const date7daysAgo = getDateMinusDays(today, 7);
 
-    // Konvertoni datën në objekt Date nëse është string
     const expenseDate = new Date(expense.date);
     return expenseDate > date7daysAgo;
   });
-
-  // Kontrollo shpenzimet e filtruara
-  console.log("Recent Expenses:", recentExpneses);
 
   return (
     <View style={styles.container}>
