@@ -34,12 +34,12 @@ function ManageExpense({ route, navigation }) {
     navigation.goBack();
   }
 
-  function confrimExpenseHandler(expenseData) {
+  async function confrimExpenseHandler(expenseData) {
     if (isEditing) {
       updateExpense(editedExpensedId, expenseData);
     } else {
-      storeExpense(expenseData);
-      addExpense(expenseData);
+      const id = await storeExpense(expenseData);
+      addExpense({ ...expenseData, id: id });
     }
     navigation.goBack();
   }
