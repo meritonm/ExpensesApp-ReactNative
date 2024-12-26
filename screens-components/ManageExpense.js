@@ -6,8 +6,10 @@ import { ExpenseContext } from "../store/expense-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpenses, storeExpense, updatedExpenses } from "../util/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function ManageExpense({ route, navigation }) {
+  const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const { deleteExpense, updateExpense, addExpense } =
     useContext(ExpenseContext);
@@ -29,9 +31,14 @@ function ManageExpense({ route, navigation }) {
 
   async function deleteExpenseHandler() {
     setIsLoading(true);
-    await deleteExpenses(editedExpensedId);
-    deleteExpense(editedExpensedId);
-    navigation.goBack();
+    try {
+      await deleteExpenses(editedExpensedId);
+      deleteExpense(editedExpensedId);
+      navigation.goBack();
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
   }
 
   function cancelExpenseHandler() {
@@ -40,15 +47,28 @@ function ManageExpense({ route, navigation }) {
 
   async function confrimExpenseHandler(expenseData) {
     setIsLoading(true);
-    if (isEditing) {
-      updateExpense(editedExpensedId, expenseData);
-      await updatedExpenses(editedExpensedId, expenseData);
-    } else {
-      const id = await storeExpense(expenseData);
-      addExpense({ ...expenseData, id: id });
+
+    try {
+      if (isEditing) {
+        updateExpense(editedExpensedId, expenseData);
+        await updatedExpenses(editedExpensedId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        addExpense({ ...expenseData, id: id });
+      }
+      navigation.goBack();
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
     }
-    navigation.goBack();
   }
+
+  function errorHandler() {
+    setError(null);
+  }
+
+  if (error && !isLoading)
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
 
   if (isLoading) return <LoadingOverlay />;
 
